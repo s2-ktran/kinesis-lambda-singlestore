@@ -12,7 +12,7 @@ CREATE TABLE vehicle_data (
     battery_level FLOAT,
     maintenance_status VARCHAR(100),
     passenger_count FLOAT,
-    `insertedAt` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)
+    s2_ts datetime(6) DEFAULT CURRENT_TIMESTAMP(6)
 );
 
 DROP TABLE vehicle_data;
@@ -20,10 +20,10 @@ DROP TABLE vehicle_data;
 SELECT COUNT(*) FROM vehicle_data;
 
 SELECT 
-    kinesisArrivalTs AS kinesis_ts,
+    kinesis_ts,
     lambda_ts, 
-    insertedAt AS s2_ts,
-    TIMESTAMPDIFF(MICROSECOND, kinesisArrivalTs, insertedAt) / 1000 AS delta_ms,
-    TIMESTAMPDIFF(MICROSECOND, lambda_ts, insertedAt) / 1000 AS lambda_ms
+    s2_ts,
+    TIMESTAMPDIFF(MICROSECOND, kinesis_ts, s2_ts) / 1000 AS delta_ms,
+    TIMESTAMPDIFF(MICROSECOND, lambda_ts, s2_ts) / 1000 AS lambda_ms
 FROM vehicle_data
 ORDER BY timestamp DESC;
